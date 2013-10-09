@@ -110,7 +110,7 @@ print "<title>TwitterCast - $song[1] - $total_listeners Listeners</title>";
 </head>
 <body><center>
 <?php
-print "$song[1] - $total_listeners Listeners</a>";
+print "#NowPlaying $song[1]";
  
 
 $fh = @fopen('title.txt', 'r+'); 
