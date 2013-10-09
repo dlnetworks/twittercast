@@ -1,3 +1,6 @@
+Twittercast - Shoutcast Song Title To Twitter Status Script
+
+
 1. Register a new app at http://dev.twitter.com/apps/new
 2. Fill in tokens and server info in twitter.php
 3. Upload title.txt, twitter.php, EpiCurl.php, EpiOAuth.php, and EpiTwitter.php to your webserver IN THE SAME FOLDER!
