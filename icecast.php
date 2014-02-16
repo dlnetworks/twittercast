@@ -19,10 +19,12 @@ $secret= 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
 $twitterObjUnAuth = new EpiTwitter($consumer_key, $consumer_secret);
  
-$SERVER = 'http://206.190.135.28:8035'; //URL TO YOUR ICECAST SERVER 
-$STATS_FILE = '/status.xsl?mount=/stream'; //PATH TO STATUS.XSL PAGE YOU CAN SEE IN YOUR BROWSER (LEAVE BLANK UNLESS DIFFERENT) 
+$SERVER = 'http://206.190.135.28:8035'; // url to icecast server
+$STATS_FILE = '/status.xsl?mount=/stream'; // path to status.xsl and mountpoint
 
-///////////////////// END OF CONFIGURATION --- DO NOT EDIT BELOW THIS LINE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
+// now go edit the paths to your title.txt at the bottom 
+// now go edit the paths to your title.txt at the bottom
+// now go edit the paths to your title.txt at the bottom
 
 //create a new curl resource 
 $ch = curl_init(); 
@@ -87,18 +89,18 @@ $radio_info['now_playing']['track'] = $x[1];
 ?>
 
 <?php foreach($radio_info as $title => $data) { switch($title) { case 'now_playing' : ?>
-<?php print "$data[artist] - $data[track]"; 
+<?php print "$data[artist] - $data[track]"; // so you can see what the output looks like
 
-$fh = @fopen('/full/path/to/title.txt', 'r+'); 
-$track = @fread($fh, filesize('/full/path/to/title.txt')); 
+$fh = @fopen('/full/path/to/title.txt', 'r+'); // use full path
+$track = @fread($fh, filesize('/full/path/to/title.txt')); // use full path
 if ($track == $data[artist].$data[track]."\n"){ 
   fclose($fh); 
   die(0); 
 }else{ 
   @fclose($fh); // if it errors, then the file doesn't exist, and the stream was never open 
-  $fh = fopen('/full/path/to/title.txt', 'w'); 
+  $fh = fopen('/full/path/to/title.txt', 'w'); // use full path
   fwrite($fh, $data[artist].$data[track]."\n");
   fclose($fh);
-  $twitterObj->post('/statuses/update.json', array('status' => '#NowPlaying - ' .$data[artist] .' - ' .$data[track])); 
+  $twitterObj->post('/statuses/update.json', array('status' => $data[artist] .' - ' .$data[track])); 
 } 
 } } ?> 
