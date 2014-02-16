@@ -81,7 +81,6 @@ $radio_info['listeners'] = $temp_array[5];
 $radio_info['most_listeners'] = $temp_array[6]; 
 $radio_info['genre'] = $temp_array[7]; 
 $radio_info['url'] = $temp_array[8]; 
-
 $x = explode(" - ",$temp_array[9]); 
 $radio_info['now_playing']['artist'] = $x[0]; 
 $radio_info['now_playing']['track'] = $x[1]; 
