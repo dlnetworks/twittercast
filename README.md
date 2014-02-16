@@ -1,17 +1,20 @@
-Twittercast - Shoutcast Song Title To Twitter Status Script
+Twittercast - Shoutcast/Icecast Song Title To Twitter Status Script
 
 
 1. Register a new app at http://dev.twitter.com/apps/new
-2. Fill in tokens and server info in twitter.php
-3. Upload title.txt, twitter.php, EpiCurl.php, EpiOAuth.php, and EpiTwitter.php to your webserver IN THE SAME FOLDER!
-4. Make sure that title.txt is writable by ALL (chmod 777)
-5. Visit twitter.php in your browser or setup a cron job (explained earlier in this thread)
+2. Fill in API keys and server info in shoutcast.php or icecast.php (dont forget to set paths for title.txt!)
+3. Upload title.txt, shoutcast.php/icecast.php, EpiCurl.php, EpiOAuth.php, and EpiTwitter.php to your webserver IN THE SAME DIRECTORY!
+4. Change the file permissions for title.txt writable by ALL (chmod 777)
+5. Visit shoutcast.php/icecast.php in your browser to trigger an update or setup a cron job.
 
 cron job example:
 
-*/3 * * * * php /home/username/public_html/domain.com/twittercast/twitter.php
+*/3 * * * * php /home/username/public_html/domain.com/twittercast/shoutcast.php
 
-where the number '3' means that it will fire every 3 mins. you may change to your desire.
+In this example php will execute shoutcast.php once ever 3 minutes. You may change to your desire.
 
-please also note that this script may not work with your hosting provider.
-some hosting providers have specific php configurations that are missing some of the requirements needed for this script to work.
+man crontab for more info.
+
+Please also note that this script may not work with your hosting provider. Many shared hosting providers have php configurations that will not support this script (no fsockopen).
+
+I provide Twittercast hosting if needed. Please contact.
