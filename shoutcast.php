@@ -16,28 +16,21 @@ $token = 'Access_Token';
 #Access Token Secret 
 $secret= 'Access_Token_Secret';
 
+$refresh = "60";  // Page refresh time in seconds. Put 0 for no refresh. (only used if updating via browser)
+$timeout = "5"; // Number of seconds before connecton times out.
+
+$ip[1] = "123.123.123.123"; // IP address of shoutcast server
+$port[1] = "8000"; // Port of shoutcast server
+
+// now go edit the paths to the title.txt file down at the bottom
+// now go edit the paths to the title.txt file down at the bottom
+// now go edit the paths to the title.txt file down at the bottom
+
 $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
 $twitterObjUnAuth = new EpiTwitter($consumer_key, $consumer_secret);
 
-
-$refresh = "60";  // Page refresh time in seconds. Put 0 for no refresh
-$timeout = "5"; // Number of seconds before connecton times out - a higher value will slow the page down if any servers are offline
-
-$ip[1] = "123.123.123.123"; 
-$port[1] = "8000";
-
-$ip[2] = "123.123.123.123."; 
-$port[2] = "8002";
-
-
-
-// Add or remove servers as needed.
-
-
 $servers = count($ip);
-?>
 
-<?php
 $i = "1";
 while($i<=$servers)
 	{
@@ -77,12 +70,12 @@ while($i<=$servers)
 					{ 
 					$msg[$i] .= "<span class=\"red\">";
 					}
-				$msg[$i] .= "Server is up at $bitrate[$i] kbps with $listeners[$i] of $max[$i] listeners";
+				
 				if ($stats[0] == $max[$i]) 
 					{ 
 					$msg[$i] .= "</span>";
 					}
-				$msg[$i] .= "\n    <p><b>Listener peak:</b> $peak[$i]";
+				
 				}
 			else
 				{
@@ -105,25 +98,25 @@ if ($refresh != "0")
 	{
 	print "<meta http-equiv=\"refresh\" content=\"$refresh\">\n";
 	}
-print "<title>TwitterCast - $song[1] - $total_listeners Listeners</title>";
+print "<title>$song[1]</title>"; // sure in the title too
 ?>
 </head>
 <body><center>
 <?php
-print "#NowPlaying $song[1]";
+print "$song[1]"; // so you can see what the output looks like 
  
 
-$fh = @fopen('title.txt', 'r+'); 
-$track = @fread($fh, filesize('title.txt')); 
+$fh = @fopen('/full/path/to/title.txt', 'r+'); // full path to title.txt
+$track = @fread($fh, filesize('/full/path/to/title.txt')); // full path to title.txt
 if ($track == $song[1]."\n"){ 
   fclose($fh); 
   die(0); 
 }else{ 
   @fclose($fh); // if it errors, then the file doesn't exist, and the stream was never open 
-  $fh = fopen('title.txt', 'w'); 
+  $fh = fopen('/full/path/to/title.txt', 'w'); // full path to title.txt
   fwrite($fh, $song[1]."\n");
   fclose($fh);
-  $twitterObj->post('/statuses/update.json', array('status' => '#NowPlaying ' .$song[1])); 
+  $twitterObj->post('/statuses/update.json', array('status' => $song[1])); // Tweet that shit. 
 } 
 
 ?>
