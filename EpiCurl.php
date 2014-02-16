@@ -23,7 +23,6 @@ class EpiCurl
   private $requests = array();
   private $responses = array();
   private $properties = array();
-
   function __construct()
   {
     if(self::$singleton == 0)
