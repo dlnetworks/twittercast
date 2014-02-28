@@ -16,8 +16,6 @@ In this example php will execute shoutcast.php once ever 3 minutes. You may chan
 
 man crontab for more info.
 
-Please also note that this script may not work with your hosting provider. Many shared hosting providers have php configurations that will not support this script (no fsockopen).
-
-This script will work properly on a defalt LAMP stack.
+This script should work properly on a defalt LAMP stack.
 
 I can provide twittercast hosting services if desired.
