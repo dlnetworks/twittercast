@@ -23,4 +23,10 @@ man wget for more info
 
 This script should work properly on a defalt LAMP stack.
 
+php module requirements
+
+sockets
+curl
+pcre
+
 I can provide twittercast hosting services if desired.
