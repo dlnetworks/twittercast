@@ -107,6 +107,6 @@ print "$current_song";
 
 // tweet that shit
 $twitterObj->post('/statuses/update.json', array('status' => $current_song));
-}
+
 ?>
 </center>
