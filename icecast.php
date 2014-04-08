@@ -19,7 +19,7 @@ $secret= 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
 $twitterObjUnAuth = new EpiTwitter($consumer_key, $consumer_secret);
  
-$SERVER = 'http://206.190.135.28:8035'; // url to icecast server and port
+$SERVER = 'http://127.0.0.1:8035'; // url to icecast server and port
 $STATS_FILE = '/status.xsl?mount=/stream'; // path to status.xsl and mountpoint
 
 // END CONFIGURATION
