@@ -93,6 +93,6 @@ print "<title>$song[1]</title>"; // sure in the title too
 <?php print "$song[1]"; // so you can see what the output looks like
 
 $twitterObj->post('/statuses/update.json', array('status' => $song[1])); // Tweet that shit. 
-} 
+
 ?>
 </center>
