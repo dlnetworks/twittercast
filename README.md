@@ -32,3 +32,6 @@ curl
 pcre
 
 I provide twittercast hosting if needed.
+
+
+** Credits to https://github.com/jmathai/twitter-async for EpiTwitter **
