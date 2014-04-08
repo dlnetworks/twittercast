@@ -89,5 +89,4 @@ $radio_info['now_playing']['track'] = $x[1];
 <?php print "$data[artist] - $data[track]"; // so you can see what the output looks like
 
 $twitterObj->post('/statuses/update.json', array('status' => $data[artist] .' - ' .$data[track])); 
-} 
 } } ?> 
