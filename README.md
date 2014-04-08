@@ -1,12 +1,12 @@
-Twittercast - Shoutcast/Icecast Song Title To Twitter Status Script
+Twittercast - Shoutcast/Icecast Song Title To Twitter PHP Status Script
 
 Supports Shoutcast V1 and V2 or Icecast
 
 1. Register a new app at http://dev.twitter.com/apps/new
-2. Fill in API keys and server info in shoutcast_v1.php or shoutcast_v2.php or icecast.php AND scroll to the bottom and enter in the full path to your title.txt file
-3. Upload title.txt, shoutcast_v1.php or shoutcast_v2.php or icecast.php, EpiCurl.php, EpiOAuth.php, EpiSequence.php, and EpiTwitter.php to your webserver IN THE SAME DIRECTORY!
-4. Change the file permissions for title.txt writable by ALL (chmod 777)
-5. Visit shoutcast_v1.php or shoutcast_v2.php or icecast.php in your browser to trigger an update or setup a cron job
+2. Fill in API keys and server info in shoutcast_v1.php or shoutcast_v2.php or icecast.php
+3. Upload all files to your webserver in a web accessable directory
+4. Set permissions on uploaded files to 755 or +x
+4. Visit shoutcast_v1.php or shoutcast_v2.php or icecast.php in your browser to trigger an update or setup a cron job
 
 cron job example:
 
@@ -23,10 +23,12 @@ man wget for more info
 
 This script should work properly on a defalt LAMP stack.
 
+** Many shared hosting prividers disable required php modules and outbound ports. Please check with your provider for supprt **
+
 php module requirements
 
 sockets
 curl
 pcre
 
-I can provide twittercast hosting services if desired.
+I provide twittercast hosting if needed.
