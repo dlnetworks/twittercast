@@ -20,14 +20,12 @@ $secret= 'xxxxxxxxxxxxxxxxxxxxx';
 $refresh = "60";
 
 // URL to your Shoutcast server, including port (no http://)
-$server = "123.123.123.123:8000";
+$server = "127.0.0.1:8000";
 
 // Admin password for your Shoutcast server
 $password = "changemenow";
 
-// now go edit the paths for title.txt at the bottom
-// now go edit the paths for title.txt at the bottom
-// now go edit the paths for title.txt at the bottom
+// END CONFIGURATION
 
 $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
 $twitterObjUnAuth = new EpiTwitter($consumer_key, $consumer_secret);
@@ -94,14 +92,6 @@ xml_set_character_data_handler($xml_parser, "characterData");
 xml_parse($xml_parser, $xml);
 xml_parser_free($xml_parser);
 
-?>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<?php
-
 if ($refresh != "0")
 {
 print "<meta http-equiv=\"refresh\" content=\"$refresh\">\n";
@@ -109,37 +99,14 @@ print "<meta http-equiv=\"refresh\" content=\"$refresh\">\n";
 print "<title>$current_song</title>";
 
 ?>
-</head>
-<body><center>
+<center>
 <?php
 
 // print "$tweet";
 print "$current_song";
-
-// checks current track in title.txt
-$fh = @fopen('/path/to/title.txt', 'r+'); // use full path
-$track = @fread($fh, filesize('/path/to/title.txt')); // use full path
-
-// if current track is the same as the last track
-if ($track == $current_song."\n"){
-fclose($fh);
-
-// die
-die(0);
-
-// if current track is NOT the same as the last track
-}else{
-@fclose($fh); // if it errors, then the file doesn't exist, and the stream was never open
-
-// change track in title.txt
-$fh = fopen('/path/to/title.txt', 'w'); // use full path
-fwrite($fh, $current_song."\n");
-fclose($fh);
 
 // tweet that shit
 $twitterObj->post('/statuses/update.json', array('status' => $current_song));
 }
 ?>
 </center>
-</body>
-</html> 
