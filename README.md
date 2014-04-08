@@ -10,7 +10,7 @@ Supports Shoutcast V1 and V2 or Icecast
 
 cron job example:
 
-*/3 * * * * php5 /home/username/public_html/domain.com/twittercast/shoutcast_v1.php
+*/3 * * * * php /home/username/public_html/domain.com/twittercast/shoutcast_v1.php
 
 In this example php will execute shoutcast_v1.php once ever 3 minutes. You may change to your desire.
 
@@ -21,7 +21,7 @@ some systems have different settings when running php from the command line... s
 man crontab for more info.
 man wget for more info
 
-This script should work properly on a defalt LAMP stack.
+This script will work properly on a defalt LAMP stack.
 
 ** Many shared hosting prividers disable required php modules and outbound ports. Please check with your provider for supprt **
 
