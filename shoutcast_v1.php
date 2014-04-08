@@ -5,26 +5,24 @@ include 'EpiOAuth.php';
 include 'EpiTwitter.php';
 
 #Consumer key token
-$consumer_key = 'Consumer_Key_Token';
+$consumer_key = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
 #Consumer secret token
-$consumer_secret = 'Consumer_Secret_Token';
+$consumer_secret = 'xxxxxxxxxxxxxxxxxxxxxxxxxx';
 
 #Access Token
-$token = 'Access_Token';
+$token = 'xxxxxxxxxxxxxxxxxxxxxxxxx';
 
 #Access Token Secret 
-$secret= 'Access_Token_Secret';
+$secret= 'xxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
 $refresh = "60";  // Page refresh time in seconds. Put 0 for no refresh. (only used if updating via browser)
 $timeout = "5"; // Number of seconds before connecton times out.
 
-$ip[1] = "123.123.123.123"; // IP address of shoutcast server
+$ip[1] = "127.0.0.1"; // IP address of shoutcast server
 $port[1] = "8000"; // Port of shoutcast server
 
-// now go edit the paths to the title.txt file down at the bottom
-// now go edit the paths to the title.txt file down at the bottom
-// now go edit the paths to the title.txt file down at the bottom
+//END CONFIGURATION
 
 $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
 $twitterObjUnAuth = new EpiTwitter($consumer_key, $consumer_secret);
@@ -84,35 +82,17 @@ while($i<=$servers)
 	$i++;
 	}
 $total_listeners = array_sum($listeners) ;
-?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<?php
+
 if ($refresh != "0") 
 	{
 	print "<meta http-equiv=\"refresh\" content=\"$refresh\">\n";
 	}
 print "<title>$song[1]</title>"; // sure in the title too
 ?>
-</head>
-<body><center>
-<?php
-print "$song[1]"; // so you can see what the output looks like 
-$fh = @fopen('/full/path/to/title.txt', 'r+'); // full path to title.txt
-$track = @fread($fh, filesize('/full/path/to/title.txt')); // full path to title.txt
-if ($track == $song[1]."\n"){ 
-  fclose($fh); 
-  die(0); 
-}else{ 
-  @fclose($fh); // if it errors, then the file doesn't exist, and the stream was never open 
-  $fh = fopen('/full/path/to/title.txt', 'w'); // full path to title.txt
-  fwrite($fh, $song[1]."\n");
-  fclose($fh);
-  $twitterObj->post('/statuses/update.json', array('status' => $song[1])); // Tweet that shit. 
+<center>
+<?php print "$song[1]"; // so you can see what the output looks like
+
+$twitterObj->post('/statuses/update.json', array('status' => $song[1])); // Tweet that shit. 
 } 
 ?>
 </center>
-</body>
-</html>
