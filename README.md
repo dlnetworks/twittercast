@@ -21,7 +21,7 @@ some systems have different settings when running php from the command line... s
 man crontab for more info.
 man wget for more info
 
-This script will work properly on a defalt LAMP stack.
+This script will work properly on a default LAMP stack.
 
 ** Many shared hosting prividers disable required php modules and outbound ports. Please check with your provider for supprt **
 
