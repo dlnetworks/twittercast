@@ -23,9 +23,9 @@ $ip[1] = "127.0.0.1"; // IP address of shoutcast server
 $port[1] = "8000"; // Port of shoutcast server
 
 //END CONFIGURATION
-
 $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
 $twitterObjUnAuth = new EpiTwitter($consumer_key, $consumer_secret);
+
 $servers = count($ip);
 $i = "1";
 while($i<=$servers)
@@ -60,8 +60,6 @@ while($i<=$servers)
 				$song[$i] = $stats[6];
 				$listeners[$i] = $stats[4];
 				$max[$i] =  $stats[3];
-				$bitrate[$i] = $stats[5];
-				$peak[$i] = $stats[2];
 				if ($stats[0] == $max[$i]) 
 					{ 
 					$msg[$i] .= "<span class=\"red\">";
@@ -81,18 +79,9 @@ while($i<=$servers)
 		}
 	$i++;
 	}
-$total_listeners = array_sum($listeners) ;
 
-if ($refresh != "0") 
-	{
-	print "<meta http-equiv=\"refresh\" content=\"$refresh\">\n";
-	}
-print "<title>$song[1]</title>"; // sure in the title too
-?>
-<center>
-<?php print "$song[1]"; // so you can see what the output looks like
+print "$song[1]"; // so you can see what the output looks like
 
 $twitterObj->post('/statuses/update.json', array('status' => $song[1])); // Tweet that shit. 
 
 ?>
-</center>
