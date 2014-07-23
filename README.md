@@ -10,13 +10,13 @@ Supports Shoutcast V1 and V2 or Icecast
 
 Customized output examples:
 
-Shoutcast 1
+Shoutcast 1:
 $twitterObj->post('/statuses/update.json', array('status' => '#tag '.$song[1].' http://url.com #notagbacks'));
 
-Shoutcast2
+Shoutcast2:
 $twitterObj->post('/statuses/update.json', array('status' => '#tag '.$current_song.' http://url.com #notagbacks'));
 
-Iceacst
+Iceacst:
 $twitterObj->post('/statuses/update.json', array('status' => '#tag '.$data[artist].' - '.$data[track].' http://url.com #notagbacks'));
 
 
