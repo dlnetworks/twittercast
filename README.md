@@ -8,6 +8,18 @@ Supports Shoutcast V1 and V2 or Icecast
 4. Set permissions on uploaded files to 755 or +x
 4. Visit shoutcast_v1.php or shoutcast_v2.php or icecast.php in your browser to trigger an update or setup a cron job
 
+Customized output examples:
+
+Shoutcast 1
+$twitterObj->post('/statuses/update.json', array('status' => '#tag '.$song[1].' http://url.com #notagbacks'));
+
+Shoutcast2
+$twitterObj->post('/statuses/update.json', array('status' => '#tag '.$current_song.' http://url.com #notagbacks'));
+
+Iceacst
+$twitterObj->post('/statuses/update.json', array('status' => '#tag '.$data[artist].' - '.$data[track].' http://url.com #notagbacks'));
+
+
 cron job example:
 
 */3 * * * * php /home/username/public_html/domain.com/twittercast/shoutcast_v1.php
