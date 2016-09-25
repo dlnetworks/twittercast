@@ -16,9 +16,6 @@ $token = 'xxxxxxxxxxxxxxxxxxxxxxxxx';
 #Access Token Secret 
 $secret= 'xxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
-$refresh = "60";  // Page refresh time in seconds. Put 0 for no refresh. (only used if updating via browser)
-$timeout = "5"; // Number of seconds before connecton times out.
-
 $ip[1] = "127.0.0.1"; // IP address of shoutcast server
 $port[1] = "8000"; // Port of shoutcast server
 
@@ -30,7 +27,7 @@ $servers = count($ip);
 $i = "1";
 while($i<=$servers)
 	{
-	$fp = @fsockopen($ip[$i],$port[$i],$errno,$errstr,$timeout);
+	$fp = @fsockopen($ip[$i],$port[$i],$errno,$errstr,5);
 	if (!$fp) 
 		{ 
 		$listeners[$i] = "0";
@@ -80,8 +77,10 @@ while($i<=$servers)
 	$i++;
 	}
 
-print "$song[1]"; // so you can see what the output looks like
+// tweet preview
+print "$song[1]"; 
 
-$twitterObj->post('/statuses/update.json', array('status' => $song[1])); // Tweet that shit. 
+// post tweet
+$twitterObj->post('/statuses/update.json', array('status' => $song[1]));  
 
 ?>
