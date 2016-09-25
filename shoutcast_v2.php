@@ -5,25 +5,25 @@ include 'EpiOAuth.php';
 include 'EpiTwitter.php';
 
 // Consumer key token
-$consumer_key = 'xxxxxxxxxxxxxxxxxxxxxx';
+$consumer_key = 'YsAmAQxF7wbiY6SKFYB2WcTkv';
 
 // Consumer secret token
-$consumer_secret = 'xxxxxxxxxxxxxxxxxxxx';
+$consumer_secret = 'jSbDIAWw0zw1MoWsuCG8P63DpQkkr8RIPCpm06w59IcQvk1pDq';
 
 // Access Token
-$token = 'xxxxxxxxxxxxxxxxxxxxx';
+$token = '2683696910-XDIkQfMh1GZsNLH0bOh69mbxZKpwqX0EzlMXygk';
 
 // Access Token Secret
-$secret= 'xxxxxxxxxxxxxxxxxxxxx';
+$secret= 'RqrRENTepLMXNWs56hkK2rEm5hxhKFb2KAmtJl8mO9euW';
 
 // Page refresh time in seconds. 0 for none. (only used if updating via browser)
 $refresh = "60";
 
 // URL to your Shoutcast server, including port (no http://)
-$server = "127.0.0.1:8000";
+$server = "192.99.34.205:8117";
 
 // Admin password for your Shoutcast server
-$password = "changemenow";
+$password = "asylum";
 
 // END CONFIGURATION
 
