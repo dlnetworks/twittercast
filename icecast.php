@@ -16,77 +16,77 @@ $token = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 #Access Token Secret 
 $secret= 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
-$twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
-$twitterObjUnAuth = new EpiTwitter($consumer_key, $consumer_secret);
- 
-$SERVER = 'http://127.0.0.1:8035'; // url to icecast server and port
-$STATS_FILE = '/status.xsl?mount=/stream'; // path to status.xsl and mountpoint
+// IP:port or hostname:port of your Icecast server (no http://)
+$server = "127.0.0.1:8000";
+
+// specific stream mountoint (including preceeding slash)
+$mount = "/mount";
+
+// username and password for your Icecast server
+$username = "source";
+$password = "password";
 
 // END CONFIGURATION
 
-//create a new curl resource 
-$ch = curl_init(); 
+$twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
+$twitterObjUnAuth = new EpiTwitter($consumer_key, $consumer_secret);
 
-//set url 
-curl_setopt($ch,CURLOPT_URL,$SERVER.$STATS_FILE); 
+// opens the xml and puts it to a variable for processing
+$mysession = curl_init();
+curl_setopt($mysession, CURLOPT_URL, "http://$server/admin/stats.xml?mount=$mount");
+curl_setopt($mysession, CURLOPT_HEADER, false);
+curl_setopt($mysession, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($mysession, CURLOPT_POST, false);
+curl_setopt($mysession, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+curl_setopt($mysession, CURLOPT_USERPWD, "$username:$password");
+curl_setopt($mysession, CURLOPT_FOLLOWLOCATION, true);
+curl_setopt($mysession, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+$xml = curl_exec($mysession);
+curl_close($mysession);
 
-//return as a string 
-curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); 
+// replace dodgy character encoding data from xml
+$xml = str_replace("***x27;", "'", $xml);
+$xml = str_replace("&apos;", "'", $xml);
+$xml = str_replace("&gt;", ">", $xml);
 
-//$output = our stauts.xsl file 
-$output = curl_exec($ch); 
+// functions for parsing xml data
+function startElement($parser, $name, $attrs) {
+global $curTag;
+$curTag .= "^$name";
+}
+function endElement($parser, $name) {
+global $curTag;
+$caret_pos = strrpos($curTag, '^');
+$curTag = substr($curTag, 0, $caret_pos);
+}
 
-//close curl resource to free up system resources 
-curl_close($ch); 
+// translate XML data into usable variables
+function characterData($parser, $data) {
+global $curTag;
 
-//build array to store our radio stats for later use 
-$radio_info = array(); 
-$radio_info['server'] = $SERVER; 
-$radio_info['title'] = ''; 
-$radio_info['description'] = ''; 
-$radio_info['content_type'] = ''; 
-$radio_info['mount_start'] = ''; 
-$radio_info['bit_rate'] = ''; 
-$radio_info['listeners'] = ''; 
-$radio_info['most_listeners'] = ''; 
-$radio_info['genre'] = ''; 
-$radio_info['url'] = ''; 
-$radio_info['now_playing'] = array(); 
-$radio_info['now_playing']['artist'] = ''; 
-$radio_info['now_playing']['track'] = ''; 
+// add more variables here to get more info from XML
+global $listeners;
+global $current_song;
 
-//loop through $ouput and sort into our different arrays 
-$temp_array = array(); 
+if ($curTag == "^ICESTATS^SOURCE^LISTENERS") {
+$listeners = $data;
+}
 
-$search_for = "<td\s[^>]*class=\"streamdata\">(.*)<\/td>"; 
-$search_td = array('<td class="streamdata">','</td>'); 
+if ($curTag == "^ICESTATS^SOURCE^TITLE") {
+$current_song = $data;
+}}
 
-if(preg_match_all("/$search_for/siU",$output,$matches)) { 
-   foreach($matches[0] as $match) { 
-      $to_push = str_replace($search_td,'',$match); 
-      $to_push = trim($to_push); 
-      array_push($temp_array,$to_push); 
-   } 
-} 
+// control for parsing xml data
+$xml_parser = xml_parser_create();
+xml_set_element_handler($xml_parser, "startElement", "endElement");
+xml_set_character_data_handler($xml_parser, "characterData");
+xml_parse($xml_parser, $xml);
+xml_parser_free($xml_parser);
 
-//sort our temp array into our ral array 
-$radio_info['title'] = $temp_array[0]; 
-$radio_info['description'] = $temp_array[1]; 
-$radio_info['content_type'] = $temp_array[2]; 
-$radio_info['mount_start'] = $temp_array[3]; 
-$radio_info['bit_rate'] = $temp_array[4]; 
-$radio_info['listeners'] = $temp_array[5]; 
-$radio_info['most_listeners'] = $temp_array[6]; 
-$radio_info['genre'] = $temp_array[7]; 
-$radio_info['url'] = $temp_array[8]; 
-$x = explode(" - ",$temp_array[9]); 
-$radio_info['now_playing']['artist'] = $x[0]; 
-$radio_info['now_playing']['track'] = $x[1]; 
+// tweet preview
+print "$current_song";
+
+// post the tweet
+$twitterObj->post('/statuses/update.json', array('status' => $current_song));
 
 ?>
-
-<?php foreach($radio_info as $title => $data) { switch($title) { case 'now_playing' : ?>
-<?php print "$data[artist] - $data[track]"; // so you can see what the output looks like
-
-$twitterObj->post('/statuses/update.json', array('status' => $data[artist] .' - ' .$data[track])); 
-} } ?> 
