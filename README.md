@@ -20,8 +20,7 @@ $twitterObj->post('/statuses/update.json', array('status' => '#tag '.$current_so
 
 Iceacst:
 
-$twitterObj->post('/statuses/update.json', array('status' => '#tag '.$data[artist].' - '.$data[track].' http://url.com #notagbacks'));
-
+$twitterObj->post('/statuses/update.json', array('status' => '#tag '.$current_song.' - '.$listeners.' Listeners http://url.com #notagbacks'));
 
 cron job example:
 
