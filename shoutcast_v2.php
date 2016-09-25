@@ -16,9 +16,6 @@ $token = 'xxxxxxxxxxxxxxxxxxxxx';
 // Access Token Secret
 $secret= 'xxxxxxxxxxxxxxxxxxxxx';
 
-// Page refresh time in seconds. 0 for none. (only used if updating via browser)
-$refresh = "60";
-
 // URL to your Shoutcast server, including port (no http://)
 $server = "127.0.0.1:8000";
 
@@ -92,16 +89,6 @@ xml_set_character_data_handler($xml_parser, "characterData");
 xml_parse($xml_parser, $xml);
 xml_parser_free($xml_parser);
 
-if ($refresh != "0")
-{
-print "<meta http-equiv=\"refresh\" content=\"$refresh\">\n";
-}
-print "<title>$current_song</title>";
-
-?>
-<center>
-<?php
-
 // print "$tweet";
 print "$current_song";
 
@@ -109,4 +96,3 @@ print "$current_song";
 $twitterObj->post('/statuses/update.json', array('status' => $current_song));
 
 ?>
-</center>
