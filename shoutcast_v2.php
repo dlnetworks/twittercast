@@ -19,6 +19,10 @@ $secret= 'xxxxxxxxxxxxxxxxxxxxx';
 // URL to your Shoutcast server, including port (no http://)
 $server = "127.0.0.1:8000";
 
+// Shoutcast stream ID
+
+$sid = "1";
+
 // Admin password for your Shoutcast server
 $password = "changemenow";
 
@@ -29,7 +33,7 @@ $twitterObjUnAuth = new EpiTwitter($consumer_key, $consumer_secret);
 
 // opens the xml and puts it to a variable for processing
 $mysession = curl_init();
-curl_setopt($mysession, CURLOPT_URL, "http://$server/admin.cgi?sid=1&mode=viewxml");
+curl_setopt($mysession, CURLOPT_URL, "http://$server/admin.cgi?sid=$sid&mode=viewxml");
 curl_setopt($mysession, CURLOPT_HEADER, false);
 curl_setopt($mysession, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($mysession, CURLOPT_POST, false);
