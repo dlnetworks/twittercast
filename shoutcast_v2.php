@@ -71,9 +71,10 @@ global $curTag;
 
 // add more variables here to get more info from XML
 global $listeners;
-global $current_song;
+global $songtitle;
+global $current_track;
 
-// check your XML stream from sc_serv for the tags available to you
+  // check your XML stream from sc_serv for the tags available to you
 // im just using current listeners and current song title
 
 if ($curTag == "^SHOUTCASTSERVER^CURRENTLISTENERS") {
@@ -81,9 +82,8 @@ $listeners = $data;
 }
 
 if ($curTag == "^SHOUTCASTSERVER^SONGTITLE") {
-$current_song = $data;
+$songtitle = $data;
 }
-
 }
 
 // control for parsing xml data
@@ -93,10 +93,14 @@ xml_set_character_data_handler($xml_parser, "characterData");
 xml_parse($xml_parser, $xml);
 xml_parser_free($xml_parser);
 
-// print "$tweet";
-print "$current_song";
+// Build output
+
+$current_track = "#NowPlaying: $songtitle - $listeners Listeners";
+
+// Browser preview;
+print "$current_track";
 
 // tweet that shit
-$twitterObj->post('/statuses/update.json', array('status' => $current_song));
+$twitterObj->post('/statuses/update.json', array('status' => $current_track));
 
 ?>
