@@ -49,6 +49,9 @@ $prefix = "#hastag";
 # include listener count in tweet (0 to disable)
 $count = "1";
 
+# full path to title.txt file
+$path = "/full/path/to/title.txt";
+
 // END CONFIGURATION
 
 $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
@@ -76,24 +79,29 @@ $i = "0";
 $song = $track[0];
 $total_listeners = array_sum($listeners);
 
-if ($count != "0") 
-	{
+if ($count != "0") {
 	$tweet = "$prefix $song - $total_listeners Locked - $url";
-	}
-else
-	{
+} else {
 	$tweet = "$prefix $song - $url";
-	}
+}
 
-if ($refresh != "0") 
-	{
+if ($refresh != "0") {
 	print "<html><head><meta http-equiv=\"refresh\" content=\"$refresh\"></head><body>$tweet</body></html>\n";
-	}
-else
-	{
+} else {
 	print "$tweet";
-	}
+}
 
-$twitterObj->post('/statuses/update.json', array('status' => $tweet));
+$fh = @fopen($path, 'r+'); 
+$playing = @fread($fh, filesize($path)); 
 
+if ($playing == $song."\n") { 
+  	fclose($fh); 
+  	die(0); 
+} else { 
+  	@fclose($fh); 
+  	$fh = fopen($path, 'w'); 
+  	fwrite($fh, $song."\n");
+  	fclose($fh);
+  	$twitterObj->post('/statuses/update.json', array('status' => $tweet));
+} 
 ?>
