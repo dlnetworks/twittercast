@@ -16,7 +16,7 @@ $token = '**************************************************';
 # Access Token Secret
 $secret= '******************************************';
 
-# Number of seconds before connecton times out.
+# Number of seconds before connection times out.
 $timeout = "5";
 
 # refresh time in seconds (0 to disable)
