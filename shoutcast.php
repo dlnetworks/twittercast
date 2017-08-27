@@ -19,6 +19,9 @@ $secret= '******************************************';
 # Number of seconds before connecton times out.
 $timeout = "5";
 
+# refresh time in seconds (0 to disable)
+$refresh = "60";
+
 # server ip or hostname (without http://)
 $ip = "127.0.0.1";
 
@@ -36,6 +39,10 @@ $prefix = "#hastag";
 
 //END CONFIGURATION
 
+if ($refresh != "0") 
+	{
+	print "<html><head><meta http-equiv=\"refresh\" content=\"$refresh\"></head><body>\n";
+	}
 $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
 $twitterObjUnAuth = new EpiTwitter($consumer_key, $consumer_secret);
 $fp = @fsockopen($ip,$port,$errno,$errstr,$timeout);
@@ -52,7 +59,15 @@ if ($fp) {
 
 $tweet = "$prefix: $song - $url";
 
-print "$tweet"; // output preview
+if ($refresh != "0") 
+	{
+	print "<html><head><meta http-equiv=\"refresh\" content=\"$refresh\"></head><body>$tweet</body></html>\n";
+	}
+else
+	{
+	print "$tweet";
+	}
 
-$twitterObj->post('/statuses/update.json', array('status' => $tweet)); 
+$twitterObj->post('/statuses/update.json', array('status' => $tweet));
+
 ?>
