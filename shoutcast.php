@@ -46,6 +46,9 @@ $url = "https://www.domain.com";
 # text to iclude at the beginning of the tweet
 $prefix = "#hastag";
 
+# include listener count in tweet (0 to disable)
+$count = "1";
+
 // END CONFIGURATION
 
 $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
