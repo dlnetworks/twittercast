@@ -24,21 +24,24 @@ $refresh = "60";
 
 # server ip/hostname (without http://)
 # server port
-# stream id (sc V1 use sid 1)
-# song from first server used for tweet
+# shoutcast DNAS version (1 or 2)
+# stream id (for v2 DNAS)
 # add or remove servers as needed
 
 $ip[0] = "127.0.0.1";
 $port[0] = "8000";
+$dnasv[0] = "2";
 $sid[0] = "1";
 
 $ip[1] = "127.0.0.1";
 $port[1] = "8000";
+$dnasv[0] = "2";
 $sid[1] = "2";
 
 $ip[2] = "127.0.0.1";
 $port[2] = "8000";
-$sid[2] = "3";
+$dnasv[0] = "1";
+$sid[2] = "1";
 
 # url to include at the end of the tweet
 $url = "https://www.domain.com";
@@ -62,7 +65,11 @@ $servers = count($ip);
 while($i<=$servers)	{
 	$fp = @fsockopen($ip[$i],$port[$i],$errno,$errstr,$timeout);
 	if ($fp) {
-		fputs($fp, "GET /7.html?sid=$sid[$i] HTTP/1.0\r\nUser-Agent: Mozilla/5.0 (The King Kong of Lawn Care)\r\n\r\n");
+		if ($dnasv = "2") {
+			fputs($fp, "GET /7.html?sid=$sid[$i] HTTP/1.0\r\nUser-Agent: Mozilla/5.0 (The King Kong of Lawn Care)\r\n\r\n");
+		} else {
+			fputs($fp, "GET /7.html HTTP/1.0\r\nUser-Agent: Mozilla/5.0 (The King Kong of Lawn Care)\r\n\r\n");
+		}
 		while (!feof($fp)) {
 			$info = fgets($fp);
 			};
