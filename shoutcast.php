@@ -35,12 +35,12 @@ $sid[0] = "1";
 
 $ip[1] = "127.0.0.1";
 $port[1] = "8000";
-$dnasv[0] = "2";
+$dnasv[1] = "2";
 $sid[1] = "2";
 
 $ip[2] = "127.0.0.1";
 $port[2] = "8000";
-$dnasv[0] = "1";
+$dnasv[2] = "1";
 $sid[2] = "1";
 
 # url to include at the end of the tweet
