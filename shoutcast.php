@@ -65,14 +65,16 @@ $servers = count($ip);
 while($i<=$servers)	{
 	$fp = @fsockopen($ip[$i],$port[$i],$errno,$errstr,$timeout);
 	if ($fp) {
-		if ($dnasv[$i] = "2") {
+		if ($dnasv[$i] == 2) {
 			fputs($fp, "GET /7.html?sid=$sid[$i] HTTP/1.0\r\nUser-Agent: Mozilla/5.0 (The King Kong of Lawn Care)\r\n\r\n");
-		} else {
+		}
+		if  ($dnasv[$i] == 1) {
 			fputs($fp, "GET /7.html HTTP/1.0\r\nUser-Agent: Mozilla/5.0 (The King Kong of Lawn Care)\r\n\r\n");
 		}
 		while (!feof($fp)) {
 			$info = fgets($fp);
 			};
+		$info = str_replace('<HTML><meta http-equiv="Pragma" content="no-cache"></head><body>', "", $info);
 		$info = str_replace('<html><body>', "", $info);
 		$info = str_replace('</body></html>', "", $info);
 		$stats = explode(',', $info);
@@ -83,15 +85,14 @@ while($i<=$servers)	{
 };
 
 $i = "0";
-$song = $track[0];
+$song = $track[1];
 $total_listeners = array_sum($listeners);
 
-if ($count != "0") {
+if ($count == 1) {
 	$tweet = "$prefix $song - $total_listeners Locked - $url";
 } else {
 	$tweet = "$prefix $song - $url";
 }
-
 if ($refresh != "0") {
 	print "<html><head><meta http-equiv=\"refresh\" content=\"$refresh\"></head><body>$tweet</body></html>\n";
 } else {
