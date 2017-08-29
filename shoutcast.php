@@ -85,7 +85,7 @@ while($i<=$servers)	{
 };
 
 $i = "0";
-$song = $track[1];
+$song = $track[0];
 $total_listeners = array_sum($listeners);
 
 if ($count == 1) {
