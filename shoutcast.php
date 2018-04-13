@@ -55,6 +55,9 @@ $count = "1";
 # full path to title.txt file
 $path = "/full/path/to/title.txt";
 
+# if the tweet contains this text, do not tweet
+$adtext = "sponsor";
+
 // END CONFIGURATION
 
 $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
@@ -104,12 +107,17 @@ $playing = @fread($fh, filesize($path));
 
 if ($playing == $song."\n") { 
   	fclose($fh); 
-  	die(0); 
+  	die(0);
 } else { 
   	@fclose($fh); 
   	$fh = fopen($path, 'w'); 
   	fwrite($fh, $song."\n");
   	fclose($fh);
-  	$twitterObj->post('/statuses/update.json', array('status' => $tweet));
+	$adchk = strpos($tweet, $adtext);
+	if ($adchk === false) {
+		$twitterObj->post('/statuses/update.json', array('status' => $tweet)); 
+	} else {
+		print "Ad detected! Not tweeting.\n"; 
+	}
 } 
 ?>
