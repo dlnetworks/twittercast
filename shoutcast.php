@@ -55,7 +55,7 @@ $count = "1";
 # full path to title.txt file
 $path = "/full/path/to/title.txt";
 
-# if the tweet contains this text, do not tweet
+# if the tweet contains this text, do not tweet - set to "" to disable
 $adtext = "sponsor";
 
 // END CONFIGURATION
@@ -113,11 +113,15 @@ if ($playing == $song."\n") {
   	$fh = fopen($path, 'w'); 
   	fwrite($fh, $song."\n");
   	fclose($fh);
-	$adchk = strpos($tweet, $adtext);
-	if ($adchk === false) {
-		$twitterObj->post('/statuses/update.json', array('status' => $tweet)); 
+	if ($adtext !== "") {
+		$adchk = strpos($tweet, $adtext);
+		if ($adchk === false) {
+			$twitterObj->post('/statuses/update.json', array('status' => $tweet)); 
+		} else {
+			print "Ad detected! Not tweeting.\n"; 
+		}
 	} else {
-		print "Ad detected! Not tweeting.\n"; 
+		$twitterObj->post('/statuses/update.json', array('status' => $tweet));
 	}
 } 
 ?>
