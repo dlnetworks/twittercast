@@ -26,6 +26,9 @@ $mount = "/mount";
 $username = "source";
 $password = "password";
 
+// if the title contains this text, do not tweet - set to "" to disable
+$adtext = "sponsor";
+
 // END CONFIGURATION
 
 $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
@@ -91,9 +94,20 @@ xml_parser_free($xml_parser);
 
 // build tweet
 $current_track = "#NowPlaying: $artist - $title - $listeners Listeners";
-print "$current_track";
+
 
 // post the tweet
-$twitterObj->post('/statuses/update.json', array('status' => $current_track));
+if ($adtext !== "") {
+		$adchk = strpos($current_track, $adtext);
+		if ($adchk === false) {
+			$twitterObj->post('/statuses/update.json', array('status' => $current_track)); 
+      print "$current_track";
+    } else {
+			print "Ad detected! Not tweeting.\n"; 
+		}
+	} else {
+		$twitterObj->post('/statuses/update.json', array('status' => $current_track));
+    print "$current_track";	
+}
 
 ?>
