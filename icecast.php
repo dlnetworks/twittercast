@@ -27,7 +27,8 @@ $username = "source";
 $password = "password";
 
 // if the title contains this text, do not tweet - set to "" to disable
-$adtext = "sponsor";
+$adtext1 = "sponsor1";
+$adtext2 = "sponsor2";
 
 // END CONFIGURATION
 
@@ -93,21 +94,25 @@ xml_parse($xml_parser, $xml);
 xml_parser_free($xml_parser);
 
 // build tweet
-$current_track = "#NowPlaying: $artist - $title - $listeners Listeners";
 
+if ($artist === "") {
+	$tweet = "#NowPlaying: $title - $listeners Listeners";
+} else {
+	$tweet = "#NowPlaying: $artist - $title - $listeners Listeners";
+}
 
-// post the tweet
-if ($adtext !== "") {
-		$adchk = strpos($current_track, $adtext);
-		if ($adchk === false) {
-			$twitterObj->post('/statuses/update.json', array('status' => $current_track)); 
-      print "$current_track";
-    } else {
-			print "Ad detected! Not tweeting.\n"; 
-		}
+// tweet
+
+if ($adtext1 !== "") || ($adtext2 !== "") {
+	if (strpos($tweet, $adtext1) === false || strpos($tweet, $adtext2) === false) {
+		$twitterObj->post('/statuses/update.json', array('status' => $tweet));
+		print "$tweet";
 	} else {
-		$twitterObj->post('/statuses/update.json', array('status' => $current_track));
-    print "$current_track";	
+		print "Ad detected! Not tweeting.\n"; 
+	}
+} else {
+	$twitterObj->post('/statuses/update.json', array('status' => $tweet));
+	print "$tweet";
 }
 
 ?>
