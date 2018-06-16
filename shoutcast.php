@@ -4,29 +4,29 @@ include 'EpiCurl.php';
 include 'EpiOAuth.php';
 include 'EpiTwitter.php';
 
-# Consumer key token
+// Consumer key token
 $consumer_key = '********************';
 
-# Consumer secret token
+// Consumer secret token
 $consumer_secret = '*******************************************';
 
-# Access Token
+// Access Token
 $token = '**************************************************';
 
-# Access Token Secret
+// Access Token Secret
 $secret= '******************************************';
 
-# Number of seconds before connection times out.
+// Number of seconds before connection times out.
 $timeout = "5";
 
-# refresh time in seconds (0 to disable)
+// refresh time in seconds (0 to disable)
 $refresh = "60";
 
-# server ip/hostname (without http://)
-# server port
-# shoutcast DNAS version (1 or 2)
-# stream id (for v2 DNAS)
-# add or remove servers as needed
+// server ip/hostname (without http://)
+// server port
+// shoutcast DNAS version (1 or 2)
+// stream id (for v2 DNAS)
+// add or remove servers as needed
 
 $ip[0] = "127.0.0.1";
 $port[0] = "8000";
@@ -43,19 +43,23 @@ $port[2] = "8000";
 $dnasv[2] = "1";
 $sid[2] = "1";
 
-# url to include at the end of the tweet
+// if the title contains this text, do not tweet - set to "" to disable
+$adtext1 = "sponsor1";
+$adtext2 = "sponsor2";
+
+// text to iclude at the beginning of the tweet - set to "" to disable
+$prefix = "#NowPlaying";
+
+// url to include at the end of the tweet - set to "" to disable
 $url = "https://www.domain.com";
 
-# text to iclude at the beginning of the tweet
-$prefix = "#hastag";
-
-# include listener count in tweet (0 to disable)
+// include listener count in tweet (0 to disable)
 $count = "1";
 
-# full path to title.txt file
+// full path to title.txt file
 $path = "/full/path/to/title.txt";
 
-# if the tweet contains this text, do not tweet - set to "" to disable
+// if the tweet contains this text, do not tweet - set to "" to disable
 $adtext1 = "sponsor1";
 $adtext2 = "sponsor2";
 
@@ -89,14 +93,24 @@ while($i<=$servers)	{
 };
 
 $i = "0";
-$song = $track[0];
+
 $total_listeners = array_sum($listeners);
 
-if ($count == 1) {
-	$tweet = "$prefix $song - $total_listeners Locked - $url";
-} else {
-	$tweet = "$prefix $song - $url";
+// build tweet
+
+$tweet = "$track[0]";
+	
+if ($prefix !== "") {
+	$tweet = "$prefix $tweet";
 }
+if ($count === 1) {
+	$tweet = "$tweet $total_listeners Locked";
+}
+if ($url !== "") {
+	$tweet = "$tweet $url";
+}
+
+
 if ($refresh != "0") {
 	print "<html><head><meta http-equiv=\"refresh\" content=\"$refresh\"></head><body>$tweet</body></html>\n";
 } else {
