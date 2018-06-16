@@ -30,6 +30,15 @@ $password = "password";
 $adtext1 = "sponsor1";
 $adtext2 = "sponsor2";
 
+// text to iclude at the beginning of the tweet - set to "" to disable
+$prefix = "#NowPlaying";
+
+// url to include at the end of the tweet - set to "" to disable
+$url = "https://www.domain.com";
+
+// include listener count in tweet (0 to disable)
+$count = "1";
+
 // END CONFIGURATION
 
 $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
@@ -55,36 +64,37 @@ $xml = str_replace("&gt;", ">", $xml);
 
 // functions for parsing xml data
 function startElement($parser, $name, $attrs) {
-global $curTag;
-$curTag .= "^$name";
+	global $curTag;
+	$curTag .= "^$name";
 }
 function endElement($parser, $name) {
-global $curTag;
-$caret_pos = strrpos($curTag, '^');
-$curTag = substr($curTag, 0, $caret_pos);
+	global $curTag;
+	$caret_pos = strrpos($curTag, '^');
+	$curTag = substr($curTag, 0, $caret_pos);
 }
 
 // translate XML data into usable variables
 function characterData($parser, $data) {
-global $curTag;
+	global $curTag;
 
 // add more variables here to get more info from XML
-global $listeners;
-global $title;
-global $artist;
-global $current_track;
+	global $listeners;
+	global $title;
+	global $artist;
 
 if ($curTag == "^ICESTATS^SOURCE^LISTENERS") {
-$listeners = $data;
+	$listeners = $data;
 }
 
 if ($curTag == "^ICESTATS^SOURCE^ARTIST") {
-$artist = $data;
+	$artist = $data;
 }
   
 if ($curTag == "^ICESTATS^SOURCE^TITLE") {
-$title = $data;
-}}
+	$title = $data;
+}
+
+}
 
 // control for parsing xml data
 $xml_parser = xml_parser_create();
@@ -95,10 +105,22 @@ xml_parser_free($xml_parser);
 
 // build tweet
 
-if ($artist === "") {
-	$tweet = "#NowPlaying: $title - $listeners Listeners";
+if ($artist !== "") {
+	$tweet = "$artist - $title";
 } else {
-	$tweet = "#NowPlaying: $artist - $title - $listeners Listeners";
+	$tweet = "$title";
+}
+
+if ($prefix !== "") {
+	$tweet = "$prefix $tweet";
+}
+
+if ($count === 1) {
+	$tweet = "$tweet $listeners Locked";
+}
+
+if ($url !== "") {
+	$tweet = "$tweet $url";
 }
 
 // tweet
