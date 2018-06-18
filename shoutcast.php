@@ -128,7 +128,7 @@ if ($playing == $song."\n") {
   	$fh = fopen($path, 'w'); 
   	fwrite($fh, $song."\n");
   	fclose($fh);
-	if ($adtext1 !== "") || ($adtext2 !== "") {
+	if ($adtext1 !== "" || $adtext2 !== "") {
 		if (strpos($tweet, $adtext1) === false || strpos($tweet, $adtext2) === false) {
 			$twitterObj->post('/statuses/update.json', array('status' => $tweet)); 
 		} else {
