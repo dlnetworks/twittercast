@@ -17,32 +17,19 @@ $token = '**************************************************';
 // Access Token Secret
 $secret= '******************************************';
 
-// Number of seconds before connection times out.
-$timeout = "5";
-
 // refresh time in seconds (0 to disable)
 $refresh = "60";
 
 // server ip/hostname (without http://)
 // server port
-// shoutcast DNAS version (1 or 2)
-// stream id (for v2 DNAS)
-// add or remove servers as needed
+// stream id (use "1" for DNAS 1.x)
+// dnas admin pass
 
-$ip[0] = "127.0.0.1";
-$port[0] = "8000";
-$dnasv[0] = "2";
-$sid[0] = "1";
-
-$ip[1] = "127.0.0.1";
-$port[1] = "8000";
-$dnasv[1] = "2";
-$sid[1] = "2";
-
-$ip[2] = "127.0.0.1";
-$port[2] = "8000";
-$dnasv[2] = "1";
-$sid[2] = "1";
+$ip = "127.0.0.1";
+$port = "8000";
+$dnas = "2";
+$sid = "1";
+$pass = "adminpass";
 
 // if the title contains this text, do not tweet - set to "" to disable
 $adtext1 = "sponsor1";
@@ -52,7 +39,7 @@ $adtext2 = "sponsor2";
 $prefix = "#NowPlaying";
 
 // url to include at the end of the tweet - set to "" to disable
-$url = "https://www.domain.com";
+$weburl = "https://www.domain.com";
 
 // include listener count in tweet (0 to disable)
 $count = "1";
@@ -69,65 +56,37 @@ $adtext2 = "sponsor2";
 $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $token, $secret);
 $twitterObjUnAuth = new EpiTwitter($consumer_key, $consumer_secret);
 
-$i = "0";
-$servers = count($ip);
-while($i<=$servers)	{
-	$fp = @fsockopen($ip[$i],$port[$i],$errno,$errstr,$timeout);
-	if ($fp) {
-		if ($dnasv[$i] == 2) {
-			fputs($fp, "GET /7.html?sid=$sid[$i] HTTP/1.0\r\nUser-Agent: Mozilla/5.0 (The King Kong of Lawn Care)\r\n\r\n");
-		}
-		if  ($dnasv[$i] == 1) {
-			fputs($fp, "GET /7.html HTTP/1.0\r\nUser-Agent: Mozilla/5.0 (The King Kong of Lawn Care)\r\n\r\n");
-		}
-		while (!feof($fp)) {
-			$info = fgets($fp);
-			};
-		$info = str_replace('<HTML><meta http-equiv="Pragma" content="no-cache"></head><body>', "", $info);
-		$info = str_replace('<html><body>', "", $info);
-		$info = str_replace('</body></html>', "", $info);
-		$stats = explode(',', $info);
-		$track[$i] = $stats[6];
-		$listeners[$i] = $stats[0];
-		};
-	$i++;
-};
+$url = "http://$ip:$port/admin.cgi?mode=viewxml&sid=$sid&pass=$pass";
 
-$i = "0";
+$stats = simplexml_load_file($url);
 
-$total_listeners = array_sum($listeners);
+$title = $stats->SONGTITLE;
+$listeners = $stats->CURRENTLISTENERS;
 
 // build tweet
 
-$tweet = "$track[0]";
+$tweet = "$title";
 	
 if ($prefix !== "") {
 	$tweet = "$prefix $tweet";
 }
 if ($count === 1) {
-	$tweet = "$tweet $total_listeners Locked";
+	$tweet = "$tweet $listeners Locked";
 }
-if ($url !== "") {
-	$tweet = "$tweet $url";
-}
-
-
-if ($refresh != "0") {
-	print "<html><head><meta http-equiv=\"refresh\" content=\"$refresh\"></head><body>$tweet</body></html>\n";
-} else {
-	print "$tweet";
+if ($weburl !== "") {
+	$tweet = "$tweet $weburl";
 }
 
 $fh = @fopen($path, 'r+'); 
 $playing = @fread($fh, filesize($path)); 
 
-if ($playing == $song."\n") { 
+if ($playing == $title."\n") { 
   	fclose($fh); 
   	die(0);
 } else { 
   	@fclose($fh); 
   	$fh = fopen($path, 'w'); 
-  	fwrite($fh, $song."\n");
+  	fwrite($fh, $title."\n");
   	fclose($fh);
 	if ($adtext1 !== "" || $adtext2 !== "") {
 		if (strpos($tweet, $adtext1) === false || strpos($tweet, $adtext2) === false) {
@@ -138,5 +97,11 @@ if ($playing == $song."\n") {
 	} else {
 		$twitterObj->post('/statuses/update.json', array('status' => $tweet));
 	}
-} 
+}
+
+if ($refresh != "0") {
+	print "<html><head><meta http-equiv=\"refresh\" content=\"$refresh\"></head><body>$tweet</body></html>\n";
+} else {
+	print "<html><head></head><body>$tweet</body></html>\n";
+}
 ?>
