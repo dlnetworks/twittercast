@@ -31,6 +31,9 @@ $password = "password";
 $adtext1 = "sponsor1";
 $adtext2 = "sponsor2";
 
+// path to title.txt
+$path = "/full/path/to/title.txt";
+
 // text to iclude at the beginning of the tweet - set to "" to disable
 $prefix = "#NowPlaying";
 
@@ -108,8 +111,10 @@ xml_parser_free($xml_parser);
 
 if ($artist !== "") {
 	$tweet = "$artist - $title";
+	$check = "$artist - $title";
 } else {
 	$tweet = "$title";
+	$check = "$title";
 }
 
 if ($prefix !== "") {
@@ -126,16 +131,25 @@ if ($url !== "") {
 
 // tweet
 
-if ($adtext1 !== "" || $adtext2 !== "") {
-	if (strpos($tweet, $adtext1) === false || strpos($tweet, $adtext2) === false) {
-		$twitterObj->post('/statuses/update.json', array('status' => $tweet));
-		print "$tweet";
-	} else {
-		print "Ad detected! Not tweeting.\n"; 
-	}
-} else {
-	$twitterObj->post('/statuses/update.json', array('status' => $tweet));
-	print "$tweet";
-}
+$fh = @fopen($path, 'r+'); 
+$playing = @fread($fh, filesize($path)); 
 
+if ($playing == $check."\n") { 
+  	fclose($fh); 
+  	die(0);
+} else { 
+  	@fclose($fh); 
+  	$fh = fopen($path, 'w'); 
+  	fwrite($fh, $check."\n");
+  	fclose($fh);
+	if ($adtext1 !== "" || $adtext2 !== "") {
+		if (strpos($tweet, $adtext1) === false || strpos($tweet, $adtext2) === false) {
+			$twitterObj->post('/statuses/update.json', array('status' => $tweet)); 
+		} else {
+			print "Ad detected! Not tweeting.\n"; 
+		}
+	} else {
+		$twitterObj->post('/statuses/update.json', array('status' => $tweet));
+	}
+}
 ?>
